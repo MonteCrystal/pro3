@@ -62,7 +62,6 @@ export default {
       console.log("notice: "+this.verifycode+" 000 "+this.form.verifyCode)
 
       if(this.verifycode === this.form.verifyCode){
-        print()
         this.isDisable = true
 
         register(this)
@@ -70,20 +69,6 @@ export default {
       }
       this.isRegisterClick = true
 
-
-      // this.axios({method:'post', url:'/register',data: {//用post方法传 输入框输入的用户名和密码
-      //     username: this.form.username,
-      //     password: this.form.password,
-      //     emailAddress:this.form.emailAddress
-      //
-      //   }})
-      //     .then(res=>{console.log('res=>',res);
-      //     this.$router.push('/main')
-      //     });
-
-      // if (this.isPWDSame) {
-      //   this.$store.dispatch("purchase/registerAccount")
-      // }
     }
   },
   watch: {

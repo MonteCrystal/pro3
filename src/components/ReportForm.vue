@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table
-        :data="tableData"
+        :data="recordList"
         style="width: 100%">
       <el-table-column
           prop="date"
@@ -18,7 +18,9 @@
           label="备注">
       </el-table-column>
       <el-table-column>
-        <el-button @click="openClick">打开</el-button>
+        <template slot-scope="scope">
+          <el-button @click="openClick(scope.row.link)">打开</el-button>
+        </template>
       </el-table-column>
 
     </el-table>
@@ -34,31 +36,32 @@
 export default {
   name: "ReportForm",
   data() {
+    this.getRecordList()
     return {
       value: false,
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        note: '诊断报告1'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        note: '诊断报告2'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        note: '诊断报告3'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        note: '诊断报告4'
-      }]
+      recordList: []
+      // {date: '2016-05-02',
+      //  name: '王小虎',
+      //  note: '样例报告',
+      //  link: 'LinkToReport'}
     }
   },
   methods: {
-    openClick() {
-      this.$router.push('/main/report')
-
+    openClick(link) {
+      this.$router.push('/main/report/' + link)
+    },
+    getRecordList(){
+      //let token = localStorage.getItem('Authorization')
+      let that = this
+      this.axios.get('/main/getRecordList')
+      .then(function(response){
+        // for(let i = 0; i < response.data['recordList'].length; i++){
+        //   this.recordList.append(response.data['recordList'][i])
+        // }
+        that.recordList = response.data['recordList']
+      }).catch(function(error){
+        console.log(error)
+      })
     }
   }
 }

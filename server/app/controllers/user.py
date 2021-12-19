@@ -1,15 +1,15 @@
 import uuid
 from flask_mail import Message
-from flask import request, jsonify
-# from flask_login import current_user
-# from werkzeug.utils import redirect
+from flask import request, jsonify, g, current_app
 
-
-# from server.app.init import app
-from flask_login import login_user
-
-from server.app.init import mail
+from server.app.init import mail, app
 from server.app.models.model import User
+
+from flask_httpauth import HTTPBasicAuth
+
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
+auth = HTTPBasicAuth()
 
 
 # @app.route('/register', methods=['POST'])
@@ -30,19 +30,18 @@ def register():
     except Exception as e:
         return jsonify({'code': 400, 'msg': 'error'})
 
-        
 
 def login():
     data = request.get_json(silent=True)
-    username = data['username']
     password = data['password']
     emailAddress = data['emailAddress']
-    user = User.query.filter(User.email == emailAddress).first()
+    user = User.query.filter_by(email=emailAddress).first()
     if user.verify_password(password):
-        login_user(user)
-        return jsonify({'code': 200, 'msg': 'success'})
-    return jsonify({'code': 400, 'msg': 'error'})
-
+        # login_user(user)
+        g.current_user = user
+        return jsonify({'code': 200, 'msg': 'ok',
+                        'token': user.generate_auth_token(expiration=3600)})
+    return jsonify({'code': 400, 'msg': 'error', 'token': user.generate_auth_token(expiration=3600)})
 
 
 def email_captcha():
@@ -63,4 +62,40 @@ def email_captcha():
         # return restful.server_error()
     # mbcache.set(email, captcha)
     # return restful.success()
-    return jsonify({'code': 200, 'msg': 'success','data':captcha})
+    return jsonify({'code': 200, 'msg': 'success', 'data': captcha})
+
+
+@auth.verify_password
+def verify_token(username, client_password):
+    username_token = request.headers.get('Token')
+    if username_token == '':
+        return False
+    else:
+        g.current_user = _verify_auth_token(username_token)
+        g.token_used = True
+        return g.current_user is not None
+
+
+def _verify_auth_token(token):
+    s = Serializer(current_app.config['SECRET_KEY'])
+    try:
+        data = s.loads(token)
+    except:
+        return None
+    return User.query.get(data['id'])
+
+
+@auth.login_required
+def get_record_list():
+    app.logger.warning('get_record_list')
+    app.logger.warning(g.current_user.my_records)
+    objList = g.current_user.my_records
+    recordList = []
+    for obj in objList:
+        recordList.append({
+            'date': str(obj.create_time),
+            'name': User.query.get(obj.user_id).user_name,
+            'note': obj.description,
+            'link': 'getrecordlistlink'
+        })
+    return jsonify({'recordList': recordList})

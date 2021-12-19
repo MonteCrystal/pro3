@@ -21,48 +21,55 @@
 
 <script>
 
-import {mapState} from "vuex";
-import {login} from '@/api/user'
+import {mapMutations, mapState} from "vuex";
 export default {
   name: "LoginForm",
-  props: ['form'],
   data() {
     return {
       isLoginClick: false,
       name:false,
-      password:false
+      hasPassword:false,
+      form:{
+        username: '',
+        password: '',
+        emailAddress: ''
+      },
     }
   },
   methods: {
+    ...mapMutations(['changeLogin']),
     onchange(){
       this.name=true
       },
     onchange2(){
-       this.password=true
+       this.hasPassword=true
      },
     loginClick() {
       // this.$store.dispatch("purchase/loginCheck")
       this.isLoginClick = true
-      login(this)
-
-
-      // this.axios({method:'post', url:'/login',data: {//用post方法传 输入框输入的用户名和密码
-      //     username: this.form.username,
-      //     password: this.form.password,
-      //     id:this.form.id
-      //   }}).then(res=>{console.log('res=>',res);
-      //   if(res.data['code'] === 200){
-      //     this.$router.push('/main')}
-      //   }
-      //   )
-      // .catch((err) =>
-      // {console.log(err);});
-      // if (this.name && this.password){
-      //   this.$router.push('/main')
-      // }
+      this.login(this)
     },
     registerClick() {
       this.$router.push('/register')
+    },
+    login(obj){
+      let _this = this
+      obj.axios.post('/login',{
+          username:obj.form.username,
+          emailAddress:obj.form.emailAddress,
+          password:obj.form.password,
+      })
+      .then(function(response){
+          if(response.data['code'] === 200){
+            _this.$store.commit('purchase/changeLogin',{Authorization: response.data['token']})
+            obj.$router.push('/main')
+          }else{
+              return false
+          }
+      })
+      .catch(function(error){
+          console.log(error)
+      })
     }
   },
   computed: {
@@ -71,6 +78,9 @@ export default {
     }),
     isUsernameEmpty() {
       return this.form.username === null
+    },
+    isIDEmpty() {
+      return this.form.emailAddress === null
     }
   },
   watch: {

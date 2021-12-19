@@ -23,7 +23,9 @@ const state = () => ({
         "verifyCode": null
     },
     accountValid: true,/////
-    errorMsg: null
+    errorMsg: null,
+
+    Authorization: localStorage.getItem('Authorization') ? localStorage.getItem('Authorization') : ''
 })
 
 const actions = {
@@ -107,6 +109,10 @@ const mutations = {
             }
         }
         state.rowData = tmp
+    },
+    changeLogin (state, user) {
+        state.Authorization = user.Authorization;
+        localStorage.setItem('Authorization', user.Authorization);
     }
 }
 

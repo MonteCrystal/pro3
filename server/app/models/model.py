@@ -1,41 +1,45 @@
-from flask import request
+from flask import current_app
+from flask_httpauth import HTTPBasicAuth
 from flask_login import UserMixin
 from server.app.init import db
 from sqlalchemy.orm import relationship
-from werkzeug.security import check_password_hash,generate_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
-class User(db.Model,UserMixin):
-    __tablename__ = 'user'
-    id = db.Column(db.INTEGER)
-    user_name = db.Column(db.String(30), nullable=False)
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+    id = db.Column(db.INTEGER,
+                   autoincrement=True,
+                   primary_key=True,
+                   nullable=False)
+    user_name = db.Column(db.String(30),
+                          nullable=False)
     age = db.Column(db.String(3))
     password = db.Column(db.String(500))
-    phone_number = db.Column(db.String(15), unique=True)
-    email = db.Column(db.String(50), primary_key=True)
-    records = db.Column(db.INTEGER)
-    images = db.Column(db.INTEGER)
-    ru = relationship('Record', backref='user_idr')
-    iu = relationship('Image', backref='user_idi')
-    qu = relationship('query', backref='user_idq')
+    phone_number = db.Column(db.String(15))
+    email = db.Column(db.String(50),
+                      nullable=False,
+                      unique=True)
 
-    # @property
-    # def password(self):
-    #     raise AttributeError('password is not a readable attribute')
-    #
-    # @password.setter
-    # def password(self, password):
-    #     """save user name, id and password hash to json file"""
-    #     self.password_hash = generate_password_hash(password)
+    my_records = relationship('Record', back_populates='record_usr')
+    my_dataobjs = relationship('DataObj', back_populates='data_usr')
+    my_algorithms = relationship('Algorithm', back_populates='algo_usr')
+
+    auth = HTTPBasicAuth()
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
-    def verify_password(self, password):
-        return check_password_hash(self.password, password)
-        # return (password==self.password)
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id}).decode('utf-8')
 
-    def set(self,username,email):
+    def verify_password(self, input_pwd):
+        return check_password_hash(self.password, input_pwd)
+
+    def set(self, username, email):
+        self.id = 0
         self.user_name = username
         self.email = email
 
@@ -48,7 +52,8 @@ class User(db.Model,UserMixin):
             db.session.rollback()
             raise e
 
-    def register(self, username, password, email):
+    @staticmethod
+    def register(username, password, email):
         try:
             user = User()
             user.set(username, email)
@@ -59,48 +64,85 @@ class User(db.Model,UserMixin):
             return False
 
 
-
-
-# @login_manager.user_loader
-# def load_user(id):
-#     return User.query.get(int(id))
-
-
-
-
-
-
 class Record(db.Model):
-    __tablename__ = 'record'
-    record_id = db.Column(db.INTEGER, primary_key=True, nullable=False, unique=True)
-    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'),nullable=False)
-    images_befor = db.Column(db.INTEGER)
-    images_after = db.Column(db.INTEGER)
-    text = db.Column(db.String(1000))
+    __tablename__ = 'records'
+    id = db.Column(db.INTEGER,
+                   primary_key=True,
+                   nullable=False,
+                   unique=True,
+                   autoincrement=True)
+    user_id = db.Column(db.INTEGER,
+                        db.ForeignKey('users.id'),
+                        nullable=False)
+    description = db.Column(db.String(1000))
+    create_time = db.Column(db.TIMESTAMP,
+                            nullable=False)
 
-class Image(db.Model):
-    __tablename__ = 'image'
-    id_address = db.Column(db.String(20), primary_key=True, nullable=False, unique=True)
-    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'),nullable=False)
-    record_id = db.Column(db.INTEGER)
-    after_process = db.Column(db.BOOLEAN)
-    corresponding_img_id = db.Column(db.String(20))
+    record_usr = relationship('User', back_populates='my_records')
+    my_queries = relationship('Query', back_populates='in_record')
 
-class algorithm(db.Model):
-    __tablename__ = 'algorithm'
-    id= db.Column(db.INTEGER, primary_key=True, nullable=False, unique=True)
-    username = db.Column(db.TEXT)
-    used_time = db.Column(db.INTEGER)
-    created = db.Column(db.TIMESTAMP)
-    input_type = db.Column(db.TEXT)
-    output_type = db.Column(db.TEXT)
-    qa = relationship('query', backref='algo_idq')
 
-class query(db.Model):
-    __tablename__ = 'query'
-    id = db.Column(db.INTEGER, primary_key=True, nullable=False, unique=True)
-    user_id = db.Column(db.INTEGER, db.ForeignKey('user.id'),nullable=False)
-    algo_id = db.Column(db.INTEGER,db.ForeignKey('algorithm.id'))
-    created = db.Column(db.TIMESTAMP)
-    input_addr = db.Column(db.TEXT,nullable=False)
-    output_addr = db.Column(db.TEXT,nullable=False)
+class DataObj(db.Model):
+    __tablename__ = 'dataobjs'
+    id_address = db.Column(db.String(100),
+                           primary_key=True,
+                           nullable=False,
+                           unique=True)
+    user_id = db.Column(db.INTEGER,
+                        db.ForeignKey('users.id'),
+                        nullable=False)
+    type = db.Column(db.TEXT,
+                     nullable=False)
+
+    data_usr = relationship('User', back_populates='my_dataobjs')
+
+
+class Algorithm(db.Model):
+    __tablename__ = 'algorithms'
+    id = db.Column(db.INTEGER,
+                   autoincrement=True,
+                   primary_key=True,
+                   nullable=False,
+                   unique=True)
+    name = db.Column(db.TEXT,
+                     nullable=False)
+    description = db.Column(db.String(1000))
+    creator_id = db.Column(db.INTEGER,
+                           db.ForeignKey('users.id'),
+                           nullable=False)
+    used_time = db.Column(db.INTEGER,
+                          nullable=False,
+                          default=0)
+    create_time = db.Column(db.TIMESTAMP,
+                            nullable=False)
+    input_type = db.Column(db.TEXT,
+                           nullable=False)
+    output_type = db.Column(db.TEXT,
+                            nullable=False)
+
+    algo_usr = relationship('User', back_populates='my_algorithms')
+    used_by_queries = relationship('Query', back_populates='use_algo')
+
+
+class Query(db.Model):
+    __tablename__ = 'queries'
+    id = db.Column(db.INTEGER,
+                   autoincrement=True,
+                   primary_key=True,
+                   nullable=False,
+                   unique=True)
+    algo_id = db.Column(db.INTEGER,
+                        db.ForeignKey('algorithms.id'),
+                        nullable=False)
+    record_id = db.Column(db.INTEGER,
+                          db.ForeignKey('records.id'),
+                          nullable=False)
+    input_id_addr = db.Column(db.String(100),
+                              db.ForeignKey('dataobjs.id_address'),
+                              nullable=False)
+    output_id_addr = db.Column(db.String(100),
+                               db.ForeignKey('dataobjs.id_address'),
+                               nullable=False)
+
+    use_algo = relationship('Algorithm', back_populates='used_by_queries')
+    in_record = relationship('Record', back_populates='my_queries')

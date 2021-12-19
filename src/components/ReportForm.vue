@@ -55,9 +55,6 @@ export default {
       let that = this
       this.axios.get('/main/getRecordList')
       .then(function(response){
-        // for(let i = 0; i < response.data['recordList'].length; i++){
-        //   this.recordList.append(response.data['recordList'][i])
-        // }
         that.recordList = response.data['recordList']
       }).catch(function(error){
         console.log(error)

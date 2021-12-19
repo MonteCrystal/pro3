@@ -21,7 +21,7 @@
                     word-wrap: break-word;
                     overflow: hidden;
                     "
-          border=true
+          :border=true
           v-for="algo in algorithms"
           :label="algo"
           :key="algo">

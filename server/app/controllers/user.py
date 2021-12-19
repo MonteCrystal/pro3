@@ -87,8 +87,6 @@ def _verify_auth_token(token):
 
 @auth.login_required
 def get_record_list():
-    app.logger.warning('get_record_list')
-    app.logger.warning(g.current_user.my_records)
     objList = g.current_user.my_records
     recordList = []
     for obj in objList:

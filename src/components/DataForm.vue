@@ -114,7 +114,6 @@ export default {
 
     },
     upload() {
-      // this.files['p1'] = e.target.files[0];
       this.axios({method: 'post', url: '/upload'})
       .then(
         response => {
@@ -127,17 +126,6 @@ export default {
       .catch(function (error) {
         console.log(error);}
     )}
-    // this.$axios.post('http://127.0.0.1:5000/upload',param,{headers:{'Content-Type':'application/x-www-form-urlencoded' }}, ) //请求头要为表单
-    //     .then(response=>{
-    //       print();
-    //       console.log(response.data);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     })
-    // }
-
-
   }
 };
 </script>

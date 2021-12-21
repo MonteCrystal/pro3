@@ -15,8 +15,7 @@
           style="display:block;
                     width:100%;
                     height:20%;
-                    margin: 0px;display:
-                    inline-grid;
+                    margin: 0;
                     white-space: pre-line;
                     word-wrap: break-word;
                     overflow: hidden;
@@ -65,6 +64,10 @@ export default {
     };
   },
   methods: {
+    handleCheckAllChange(val) {
+        this.checkedAlgorithms = val ? algoOptions : [];
+        this.isIndeterminate = false;
+    },
     handleCheckedAlgorithmsChange(val) {
       let checkedCount = val.length;
       this.checkAll = checkedCount === this.algorithms.length;
@@ -73,7 +76,6 @@ export default {
       runAlgo(){
         this.$router.push('/main/algo')
       },
-
     tirggerFile(event) {
       let file = event.target.files;
       let reader = new FileReader();//读取文件
@@ -114,20 +116,17 @@ export default {
     upload() {
       // this.files['p1'] = e.target.files[0];
       this.axios({method: 'post', url: '/upload'})
-          .then(
-              response => {
-                console.log(response.data);
-                if (response.data['code'] === 200) {
-                  this.$message('上传成功')
-                }
+      .then(
+        response => {
+          console.log(response.data);
+          if (response.data['code'] === 200) {
+            this.$message('上传成功')
+          }
 
-              })
-          .catch(function (error) {
-            console.log(error);
-          })
-
-    },
-
+        })
+      .catch(function (error) {
+        console.log(error);}
+    )}
     // this.$axios.post('http://127.0.0.1:5000/upload',param,{headers:{'Content-Type':'application/x-www-form-urlencoded' }}, ) //请求头要为表单
     //     .then(response=>{
     //       print();

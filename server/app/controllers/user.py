@@ -36,12 +36,14 @@ def login():
     password = data['password']
     emailAddress = data['emailAddress']
     user = User.query.filter_by(email=emailAddress).first()
+    if user is None:
+        return jsonify({'code': 400, 'msg': 'error', 'token': ''})
     if user.verify_password(password):
         # login_user(user)
         g.current_user = user
         return jsonify({'code': 200, 'msg': 'ok',
                         'token': user.generate_auth_token(expiration=3600)})
-    return jsonify({'code': 400, 'msg': 'error', 'token': user.generate_auth_token(expiration=3600)})
+    return jsonify({'code': 400, 'msg': 'error', 'token': ''})
 
 
 def email_captcha():
@@ -97,3 +99,8 @@ def get_record_list():
             'link': 'getrecordlistlink'
         })
     return jsonify({'recordList': recordList})
+
+
+@auth.error_handler
+def auth_error(status):
+    return "Access Denied", status

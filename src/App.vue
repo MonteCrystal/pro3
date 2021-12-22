@@ -1,14 +1,46 @@
 <template>
-  <div id="app">
+  <div id="app" @click="clicked">
     <router-view/>
   </div>
 </template>
 
 <script>
-
+// import {jQuery} from '../jquery-3.6.0'
+import $ from 'jquery'
 export default {
   name: 'App',
-  components: {}
+  components: {},
+  data() {
+    return{
+    }
+  },
+  methods:{
+    clicked(){
+    }
+  },
+  mounted(){
+    const that = this;
+    let lastTime = new Date().getTime();
+    let currentTime = new Date().getTime(); // 单位是毫秒
+    const HOUR_OUT = 1; // 1小时后过期
+    const timeOut = HOUR_OUT * 60 * 60 * 1000;
+    $(function (){
+      $(document).mouseover(function (){
+        lastTime = new Date().getTime();
+      });
+    });
+
+    function testTime(){
+      currentTime = new Date().getTime();
+      if(currentTime - lastTime > timeOut){
+        localStorage.removeItem('Authorization');
+        console.log('timeout')
+        that.$router.push('/login');
+      }
+    }
+
+    window.setInterval(testTime, 1000);
+  }
 }
 </script>
 

@@ -51,7 +51,9 @@ export default {
       this.$router.push('/main/report/' + link)
     },
     getRecordList(){
-      //let token = localStorage.getItem('Authorization')
+      // let token = localStorage.getItem('Authorization')
+      // console.log("token==>")
+      // console.log(token)
       let that = this
       this.axios.get('/main/getRecordList')
       .then(function(response){

@@ -13,6 +13,5 @@ app.add_url_rule(
 app.add_url_rule(
         '/main/getRecordList', view_func=get_record_list, methods=['GET'])
 
-
 if __name__ == '__main__':
     app.run(debug=True)

@@ -18,7 +18,6 @@ const routes = [
     {path:'/main/history',component: History},
     {path:'/main/personal',component: Personal},
     {path:'/main/algo',component:Algorithm}
-
 ]
 
 const router = new VueRouter({

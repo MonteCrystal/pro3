@@ -26,7 +26,7 @@ import LoginForm from "@/components/LoginForm";
 import {mapState} from "vuex";
 
 export default {
-  name: "Login",
+  name: "LoginPage",
   components: {
     LoginForm
   },

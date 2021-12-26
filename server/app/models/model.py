@@ -119,6 +119,8 @@ class Algorithm(db.Model):
                            nullable=False)
     output_type = db.Column(db.TEXT,
                             nullable=False)
+    link = db.Column(db.String(100),
+                     nullable=False)
 
     algo_usr = relationship('User', back_populates='my_algorithms')
     used_by_queries = relationship('Query', back_populates='use_algo')

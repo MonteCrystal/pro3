@@ -26,7 +26,7 @@ import DisplayFooter from "../components/DisplayFooter.vue"
 import DisplayMenu from "@/components/DisplayMenu";
 
 export default {
-    name: "Diagnose",
+    name: "DataListPage",
     components: {DisplayHeader, DisplayAlgorithm, DisplayFooter,DisplayMenu}
 }
 </script>

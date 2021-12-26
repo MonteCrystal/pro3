@@ -3,7 +3,7 @@ from flask_mail import Message
 from flask import request, jsonify, g, current_app
 
 from server.app.init import mail, app
-from server.app.models.model import User
+from server.app.models.model import User, Record, Algorithm
 
 from flask_httpauth import HTTPBasicAuth
 
@@ -93,12 +93,30 @@ def get_record_list():
     recordList = []
     for obj in objList:
         recordList.append({
+            'id': obj.id,
             'date': str(obj.create_time),
             'name': User.query.get(obj.user_id).user_name,
             'note': obj.description,
-            'link': 'getrecordlistlink'
         })
     return jsonify({'recordList': recordList})
+
+
+@auth.login_required
+def get_query_list():
+    data = request.get_json(silent=True)
+    recordId = int(data['recordId'])
+    objList = Record.query.filter_by(id=recordId).first().my_queries
+    queryList = []
+    for obj in objList:
+        algo = Algorithm.query.filter_by(id=obj.algo_id).first()
+        queryList.append({
+            'algo_name': algo.name,
+            'algo_desc': algo.description,
+            'algo_link': algo.link,
+            'input_id_addr': obj.input_id_addr,
+            'output_id_addr': obj.output_id_addr
+        })
+    return jsonify({'queryList': queryList})
 
 
 @auth.error_handler

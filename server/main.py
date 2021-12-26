@@ -1,6 +1,6 @@
 from server.app.controllers.file import upload
 from server.app.init import app
-from server.app.controllers.user import register, login, email_captcha, get_record_list
+from server.app.controllers.user import register, login, email_captcha, get_record_list, get_query_list
 
 app.add_url_rule(
         '/register', view_func=register, methods=['POST'])
@@ -12,6 +12,8 @@ app.add_url_rule(
         '/upload', view_func=upload, methods=['POST'])
 app.add_url_rule(
         '/main/getRecordList', view_func=get_record_list, methods=['GET'])
+app.add_url_rule(
+        '/main/record/getQueryList', view_func=get_query_list, methods=['POST'])
 
 if __name__ == '__main__':
     app.run(debug=True)

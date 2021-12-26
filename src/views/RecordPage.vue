@@ -7,24 +7,28 @@
       <el-header height="60px">
         <DisplayHeader></DisplayHeader></el-header>
       <el-main>
-        <AlgorithmForm></AlgorithmForm>
+        <RecordBody v-bind:record_id="record_id"></RecordBody>
       </el-main>
       <el-footer>
         <DisplayFooter></DisplayFooter>
       </el-footer>
     </el-container>
-
   </el-container>
 </template>
 
 <script>
+import RecordBody from "../components/RecordBody";
 import DisplayMenu from "../components/DisplayMenu";
 import DisplayFooter from "../components/DisplayFooter";
 import DisplayHeader from "../components/DisplayHeader";
-import AlgorithmForm from "@/components/AlgorithmForm";
 export default {
-  name: "Algorithm",
-  components: {AlgorithmForm, DisplayHeader, DisplayFooter, DisplayMenu}
+  name: "RecordPage",
+  components: {DisplayHeader, DisplayFooter, DisplayMenu, RecordBody},
+  data(){
+    return{
+        record_id: this.$route.query.record_id
+    }
+  }
 }
 </script>
 
@@ -32,6 +36,9 @@ export default {
 .el-header, .el-footer {
   background-color: #B3C0D1;
   color: #333;
+  text-align: center;
+  line-height: 60px;
+  font-size: 26px;
 }
 
 .el-aside {

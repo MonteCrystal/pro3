@@ -1,13 +1,13 @@
 <template>
   <el-container>
     <el-aside  width="200px" style="background-color: rgb(238, 241, 246)">
-      <DisplayMenu></DisplayMenu>
+      <ReportMenu></ReportMenu>
     </el-aside>
     <el-container>
       <el-header height="60px">
         <DisplayHeader></DisplayHeader></el-header>
       <el-main>
-        <DisplayReport></DisplayReport>
+        <RecordList></RecordList>
       </el-main>
       <el-footer>
         <DisplayFooter></DisplayFooter>
@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import DisplayReport from "../components/DisplayReport";
-import DisplayMenu from "../components/DisplayMenu";
+import ReportMenu from "../components/DisplayMenu";
 import DisplayFooter from "../components/DisplayFooter";
 import DisplayHeader from "../components/DisplayHeader";
+import RecordList from "@/components/RecordList";
 export default {
-  name: "Display",
-  components: {DisplayHeader, DisplayFooter, DisplayMenu, DisplayReport}
+  name: "MainPage",
+  components: {RecordList, DisplayHeader, DisplayFooter, ReportMenu}
 }
 </script>
 
@@ -32,9 +32,6 @@ export default {
 .el-header, .el-footer {
   background-color: #B3C0D1;
   color: #333;
-  text-align: center;
-  line-height: 60px;
-  font-size: 26px;
 }
 
 .el-aside {

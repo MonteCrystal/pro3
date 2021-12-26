@@ -21,6 +21,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 handler = logging.FileHandler('flask.log')
 app.logger.addHandler(handler)
+# app.logger.warn('')
 
 
 @app.after_request

@@ -1,13 +1,13 @@
 <template>
   <el-container>
     <el-aside  width="200px" style="background-color: rgb(238, 241, 246)">
-      <ReportMenu></ReportMenu>
+      <DisplayMenu></DisplayMenu>
     </el-aside>
     <el-container>
       <el-header height="60px">
         <DisplayHeader></DisplayHeader></el-header>
       <el-main>
-        <ReportForm></ReportForm>
+        <AlgorithmForm></AlgorithmForm>
       </el-main>
       <el-footer>
         <DisplayFooter></DisplayFooter>
@@ -18,13 +18,13 @@
 </template>
 
 <script>
-import ReportMenu from "../components/DisplayMenu";
+import DisplayMenu from "../components/DisplayMenu";
 import DisplayFooter from "../components/DisplayFooter";
 import DisplayHeader from "../components/DisplayHeader";
-import ReportForm from "@/components/ReportForm";
+import AlgorithmForm from "@/components/AlgorithmForm";
 export default {
-  name: "ReportList",
-  components: {ReportForm, DisplayHeader, DisplayFooter, ReportMenu}
+  name: "AlgorithmPage",
+  components: {AlgorithmForm, DisplayHeader, DisplayFooter, DisplayMenu}
 }
 </script>
 

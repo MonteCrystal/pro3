@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column>
         <template slot-scope="scope">
-          <el-button @click="openClick(scope.row.link)">打开</el-button>
+          <el-button @click="openClick(scope.row.id)">打开</el-button>
         </template>
       </el-table-column>
 
@@ -34,30 +34,26 @@
 
 <script>
 export default {
-  name: "ReportForm",
+  name: "RecordList",
   data() {
     this.getRecordList()
     return {
       value: false,
       recordList: []
-      // {date: '2016-05-02',
-      //  name: '王小虎',
-      //  note: '样例报告',
-      //  link: 'LinkToReport'}
     }
   },
   methods: {
-    openClick(link) {
-      this.$router.push('/main/report/' + link)
+    openClick(rec_id) {
+      this.$router.push({ path: '/main/record', query: { record_id: rec_id }});
     },
     getRecordList(){
-      // let token = localStorage.getItem('Authorization')
-      // console.log("token==>")
-      // console.log(token)
       let that = this
-      this.axios.get('/main/getRecordList')
-      .then(function(response){
-        that.recordList = response.data['recordList']
+      that.axios({
+        method:'get',
+        url:'/main/getRecordList'
+      })
+      .then(res=>{
+        that.recordList = res.data['recordList']
       }).catch(function(error){
         console.log(error)
       })
@@ -69,3 +65,8 @@ export default {
 <style scoped>
 
 </style>
+
+<!--{date: '2016-05-02',-->
+<!-- name: '王小虎',-->
+<!-- note: '样例报告',-->
+<!-- id: 12345}-->

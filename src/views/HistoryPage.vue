@@ -23,7 +23,7 @@ import DisplayFooter from "../components/DisplayFooter";
 import DisplayHeader from "../components/DisplayHeader";
 import HistoryForm from "@/components/HistoryForm";
 export default {
-  name: "History",
+  name: "HistoryPage",
   components: {HistoryForm, DisplayHeader, DisplayFooter, DisplayMenu}
 }
 </script>

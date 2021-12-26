@@ -27,7 +27,7 @@
 import RegisterForm from "@/components/RegisterForm";
 
 export default {
-  name: "Register",
+  name: "RegisterPage",
   components: {
     RegisterForm
   },

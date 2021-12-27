@@ -16,12 +16,12 @@
       </el-table-column>
       <el-table-column label="输入">
         <template slot-scope="scope">
-          <img :src="scope.row.input_id_addr" width="40" height="40"/>
+          <img :src="scope.row.input_addr" width="40" height="40"/>
         </template>
       </el-table-column>
       <el-table-column label="输出">
         <template slot-scope="scope">
-          <img :src="scope.row.output_id_addr" width="40" height="40"/>
+          <img :src="scope.row.output_addr" width="40" height="40"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -94,5 +94,5 @@ export default {
 <!--'algo_name': algo.name,-->
 <!--'algo_desc': algo.description,-->
 <!--'algo_link': algo.link,-->
-<!--'input_id_addr': obj.input_id_addr,-->
-<!--'output_id_addr': obj.output_id_addr-->
+<!--'input_addr': -->
+<!--'output_addr': -->

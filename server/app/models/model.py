@@ -84,10 +84,14 @@ class Record(db.Model):
 
 class DataObj(db.Model):
     __tablename__ = 'dataobjs'
-    id_address = db.Column(db.String(100),
-                           primary_key=True,
-                           nullable=False,
-                           unique=True)
+    id = db.Column(db.INTEGER,
+                   primary_key=True,
+                   nullable=False,
+                   unique=True,
+                   autoincrement=True)
+    address = db.Column(db.String(100),
+                        nullable=False,
+                        unique=True)
     user_id = db.Column(db.INTEGER,
                         db.ForeignKey('users.id'),
                         nullable=False)
@@ -104,6 +108,9 @@ class Algorithm(db.Model):
                    primary_key=True,
                    nullable=False,
                    unique=True)
+    address = db.Column(db.String(100),
+                        nullable=False,
+                        unique=True)
     name = db.Column(db.TEXT,
                      nullable=False)
     description = db.Column(db.String(1000))
@@ -120,7 +127,8 @@ class Algorithm(db.Model):
     output_type = db.Column(db.TEXT,
                             nullable=False)
     link = db.Column(db.String(100),
-                     nullable=False)
+                     nullable=False,
+                     unique=True)
 
     algo_usr = relationship('User', back_populates='my_algorithms')
     used_by_queries = relationship('Query', back_populates='use_algo')
@@ -139,12 +147,12 @@ class Query(db.Model):
     record_id = db.Column(db.INTEGER,
                           db.ForeignKey('records.id'),
                           nullable=False)
-    input_id_addr = db.Column(db.String(100),
-                              db.ForeignKey('dataobjs.id_address'),
-                              nullable=False)
-    output_id_addr = db.Column(db.String(100),
-                               db.ForeignKey('dataobjs.id_address'),
-                               nullable=False)
+    input_id = db.Column(db.INTEGER,
+                         db.ForeignKey('dataobjs.id'),
+                         nullable=False)
+    output_id = db.Column(db.INTEGER,
+                          db.ForeignKey('dataobjs.id'),
+                          nullable=False)
 
     use_algo = relationship('Algorithm', back_populates='used_by_queries')
     in_record = relationship('Record', back_populates='my_queries')

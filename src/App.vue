@@ -35,7 +35,7 @@ export default {
       if(currentTime - lastTime > timeOut){
         localStorage.removeItem('Authorization');
         console.log('timeout')
-        that.$router.push('/login');
+        that.$router.push('/login'); // redundant navigation 不用管它，也可.catch(err=>err);
       }
     }
 

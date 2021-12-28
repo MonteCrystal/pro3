@@ -65,7 +65,7 @@ export default {
       }).catch(function(error){
         console.log(error)
       })
-    }
+    },
   }
 }
 </script>
@@ -96,3 +96,5 @@ export default {
 <!--'algo_link': algo.link,-->
 <!--'input_addr': -->
 <!--'output_addr': -->
+
+<!--<img :src="`data:image/png;base64,${scope.row.output_addr}`" width="40" height="40"/>-->

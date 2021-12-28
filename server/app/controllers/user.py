@@ -28,6 +28,7 @@ def register():
         user.save()
         return jsonify({'code': 200, 'msg': 'success'})
     except Exception as e:
+        app.logger.warn(e)
         return jsonify({'code': 400, 'msg': 'error'})
 
 

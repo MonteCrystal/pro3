@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
-
+from server.app.init import db
 from server.app.models.model import User
 
 
@@ -10,6 +10,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired('password is null')])
     login = SubmitField('login')
     logout = SubmitField('logout')
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -20,6 +21,6 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = db.session.query(User).filter(User.email == email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')

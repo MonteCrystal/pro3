@@ -9,6 +9,7 @@
       </el-header>
       <el-main>
         <DisplayAlgorithm></DisplayAlgorithm>
+        <ImageUploader></ImageUploader>
       </el-main>
       <el-footer>
         <DisplayFooter></DisplayFooter>
@@ -24,10 +25,11 @@ import DisplayHeader from "../components/DisplayHeader.vue"
 import DisplayAlgorithm from "../components/DataForm.vue"
 import DisplayFooter from "../components/DisplayFooter.vue"
 import DisplayMenu from "@/components/DisplayMenu";
+import ImageUploader from "@/components/ImageUploader";
 
 export default {
     name: "DataListPage",
-    components: {DisplayHeader, DisplayAlgorithm, DisplayFooter,DisplayMenu}
+    components: {ImageUploader,DisplayHeader, DisplayAlgorithm, DisplayFooter,DisplayMenu}
 }
 </script>
 

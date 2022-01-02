@@ -30,10 +30,10 @@
     <div style="margin: 30px 0;"></div>
 
 
-    <input type="file" ref="file2" name="check_img_url" accept="image/*" multiple="true" @change="tirggerFile($event)"/>
-    <div>
-      <img style="width:200px;height:150px;margin-left:105px" id="img1" src alt/>
-    </div>
+<!--    <input type="file" ref="file2" name="check_img_url" accept="image/*" multiple="true" @change="tirggerFile($event)"/>-->
+<!--    <div>-->
+<!--      <img style="width:200px;height:150px;margin-left:105px" id="img1" src alt/>-->
+<!--    </div>-->
 
 
     <el-button type="primary" @click="upload">上传</el-button>
@@ -76,26 +76,6 @@ export default {
       runAlgo(){
         this.$router.push('/main/algo')
       },
-    tirggerFile(event) {
-      let file = event.target.files;
-      let reader = new FileReader();//读取文件
-      reader.readAsDataURL(file[0]);
-      reader.onload = function () {
-        document.getElementById("img1").src = reader.result;
-      };
-      let param = new FormData();//创建form对象
-      param.append('file', event.target.files[0]);//通过append向form对象添加数据
-      // console.log(param.get('file')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-      this.axios({method: 'post', url: '/update', data: param})
-          .then(
-              response => {
-                console.log(response.data);
-                this.$message('上传成功');
-              })
-          .catch(function (error) {
-            console.log(error);
-          })
-    },
     update(e) {
       // let file = e.target.files[0];
       let param = new FormData();//创建form对象
@@ -133,7 +113,7 @@ export default {
 <style>
 
 .cont {
-  height: 80vh;
+
 }
 
 .el-checkbox.is-bordered {

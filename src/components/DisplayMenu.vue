@@ -2,8 +2,8 @@
   <div>
     <p>目录</p>
     <el-menu :router=true>
-      <el-menu-item index='/main'>报告</el-menu-item>
-      <el-menu-item index='/main/datalist' @click="openData">数据</el-menu-item>
+      <el-menu-item index='/main'>我的报告</el-menu-item>
+      <el-menu-item index='/main/datalist' @click="openData">我的数据</el-menu-item>
       <el-menu-item index='/main/history' disabled>历史记录</el-menu-item>
       <el-menu-item index='/main/personal' disabled>个人中心</el-menu-item>
     </el-menu>

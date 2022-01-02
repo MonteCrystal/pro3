@@ -1,13 +1,16 @@
 import uuid
+
 from flask_mail import Message
 from flask import request, jsonify, g, current_app
 
-from server.app.init import mail, app
-from server.app.models.model import User, Record, Algorithm, DataObj
+from server.app.init import mail, app, db
+from server.app.models.model import User, DataObj, Algorithm, Query
 
 from flask_httpauth import HTTPBasicAuth
 
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
+from sqlalchemy import func
 
 auth = HTTPBasicAuth()
 
@@ -36,7 +39,7 @@ def login():
     data = request.get_json(silent=True)
     password = data['password']
     emailAddress = data['emailAddress']
-    user = User.query.filter_by(email=emailAddress).first()
+    user = db.session.query(User).filter(User.email == emailAddress).first()
     if user is None:
         return jsonify({'code': 400, 'msg': 'error', 'token': ''})
     if user.verify_password(password):
@@ -85,7 +88,7 @@ def _verify_auth_token(token):
         data = s.loads(token)
     except:
         return None
-    return User.query.get(data['id'])
+    return db.session.query(User).filter(User.id == data['id']).first()
 
 
 @auth.login_required
@@ -96,7 +99,7 @@ def get_record_list():
         recordList.append({
             'id': obj.id,
             'date': str(obj.create_time),
-            'name': User.query.get(obj.user_id).user_name,
+            'name': db.session.query(User.user_name).filter(User.id == obj.user_id).first()[0],
             'note': obj.description,
         })
     return jsonify({'recordList': recordList})
@@ -106,20 +109,59 @@ def get_record_list():
 def get_query_list():
     data = request.get_json(silent=True)
     recordId = int(data['recordId'])
-    objqueryList = Record.query.filter_by(id=recordId).first().my_queries
+    objqueryList = db.session.query(Query).filter(Query.record_id == recordId).all()
     queryList = []
     for obj in objqueryList:
-        algo = Algorithm.query.filter_by(id=obj.algo_id).first()
+        algo = db.session.query(Algorithm).filter(Algorithm.id == obj.algo_id).first()
+        in_ad = db.session.query(DataObj.address).filter(DataObj.id == obj.input_id).first()[0]
+        out_ad = db.session.query(DataObj.address).filter(DataObj.id == obj.output_id).first()[0]
         queryList.append({
             'algo_name': algo.name,
             'algo_desc': algo.description,
             'algo_link': algo.link,
-            'input_addr': DataObj.query.filter_by(id=obj.input_id).first().address,
-            'output_addr': DataObj.query.filter_by(id=obj.output_id).first().address,
+            'input_addr': addr_back_to_front(in_ad),
+            'output_addr': addr_back_to_front(out_ad),
         })
+
     return jsonify({'queryList': queryList})
 
 
 @auth.error_handler
 def auth_error(status):
     return "Access Denied", status
+
+
+@auth.login_required
+def getfilename(type):
+    uid = "u" + str(g.current_user.id)
+    oid = "o" + str(DataObj.count() + 1)
+    return f"/static/uploads/dataobjs/{uid}{oid}.{type.lower()}"
+
+
+@auth.login_required
+def getuid():
+    return str(g.current_user.id)
+
+
+@auth.login_required
+def get_algorithm_list():
+    algos = Algorithm.get_all()
+    ret = []
+    for algo in algos:
+        ret.append({
+            'id': algo.id,
+            'name': algo.name,
+            'description': algo.description,
+            'input_format': algo.input_type,
+            'output_format': algo.output_type,
+            'uploader': algo.creator_id,
+            'upload_timestamp': algo.create_time,
+            'used_time': algo.used_time,
+            'wiki': algo.link
+        })
+    return jsonify({'algorithmList':ret})
+
+
+@auth.login_required
+def addr_back_to_front(back):
+    return f"/{back.split('/',2)[2]}"

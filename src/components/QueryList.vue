@@ -4,24 +4,14 @@
         :data="queryList"
         stripe
         style="width: 100%">
-      <el-table-column
-          prop="algo_name"
-          label="算法名称"
-          width="180">
-      </el-table-column>
-      <el-table-column
-          prop="algo_desc"
-          label="算法描述"
-          width="180">
-      </el-table-column>
       <el-table-column label="输入">
         <template slot-scope="scope">
-          <img :src="scope.row.input_addr" width="40" height="40"/>
+          <img :src="scope.row.input_addr"/>
         </template>
       </el-table-column>
       <el-table-column label="输出">
         <template slot-scope="scope">
-          <img :src="scope.row.output_addr" width="40" height="40"/>
+          <img :src="scope.row.output_addr"/>
         </template>
       </el-table-column>
       <el-table-column
@@ -77,7 +67,7 @@ export default {
 <!--<div class="set">-->
 <!--    <el-row :gutter="10">-->
 <!--      <el-col :span="10">-->
-<!--        <img src="../assets/img.png" height="355" width="355"/>-->
+<!--        <img src="../assets/1.png" height="355" width="355"/>-->
 <!--      </el-col>-->
 <!--      <el-col :span="11">-->
 <!--        <img src="../assets/img_1.png" height="380" width="355"/></el-col>-->

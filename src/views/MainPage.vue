@@ -8,6 +8,7 @@
         <DisplayHeader></DisplayHeader></el-header>
       <el-main>
         <RecordList></RecordList>
+        <el-button type="primary" @click="genRecord">创建报告</el-button>
       </el-main>
       <el-footer>
         <DisplayFooter></DisplayFooter>
@@ -24,7 +25,12 @@ import DisplayHeader from "../components/DisplayHeader";
 import RecordList from "@/components/RecordList";
 export default {
   name: "MainPage",
-  components: {RecordList, DisplayHeader, DisplayFooter, ReportMenu}
+  components: {RecordList, DisplayHeader, DisplayFooter, ReportMenu},
+  methods:{
+    genRecord(){
+      this.$router.push('/main/upload')
+    }
+  }
 }
 </script>
 

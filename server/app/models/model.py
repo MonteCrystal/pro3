@@ -1,10 +1,14 @@
+import os
+
 from flask import current_app
 from flask_httpauth import HTTPBasicAuth
 from flask_login import UserMixin
-from server.app.init import db
-from sqlalchemy.orm import relationship
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy import func
+from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from server.app.init import db
 
 
 class User(db.Model, UserMixin):
@@ -64,24 +68,6 @@ class User(db.Model, UserMixin):
             return False
 
 
-class Record(db.Model):
-    __tablename__ = 'records'
-    id = db.Column(db.INTEGER,
-                   primary_key=True,
-                   nullable=False,
-                   unique=True,
-                   autoincrement=True)
-    user_id = db.Column(db.INTEGER,
-                        db.ForeignKey('users.id'),
-                        nullable=False)
-    description = db.Column(db.String(1000))
-    create_time = db.Column(db.TIMESTAMP,
-                            nullable=False)
-
-    record_usr = relationship('User', back_populates='my_records')
-    my_queries = relationship('Query', back_populates='in_record')
-
-
 class DataObj(db.Model):
     __tablename__ = 'dataobjs'
     id = db.Column(db.INTEGER,
@@ -99,6 +85,36 @@ class DataObj(db.Model):
                      nullable=False)
 
     data_usr = relationship('User', back_populates='my_dataobjs')
+
+    def set(self, addr, uid, type):
+        self.address = addr
+        self.user_id = uid
+        self.type = type
+
+    def save(self, file=None):
+        try:
+            if file is not None:
+                file.save(self.address)
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            if file is not None:
+                try:
+                    os.remove(self.address)
+                except FileNotFoundError:
+                    pass
+                raise e
+
+    @staticmethod
+    def count():
+        try:
+            return db.session.query(func.count(DataObj.id)).scalar()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            raise e
 
 
 class Algorithm(db.Model):
@@ -133,6 +149,45 @@ class Algorithm(db.Model):
     algo_usr = relationship('User', back_populates='my_algorithms')
     used_by_queries = relationship('Query', back_populates='use_algo')
 
+    @staticmethod
+    def get_all():
+        try:
+            return db.session.query(Algorithm).all()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            raise e
+
+
+class Record(db.Model):
+    __tablename__ = 'records'
+    id = db.Column(db.INTEGER,
+                   primary_key=True,
+                   nullable=False,
+                   unique=True,
+                   autoincrement=True)
+    user_id = db.Column(db.INTEGER,
+                        db.ForeignKey('users.id'),
+                        nullable=False)
+    description = db.Column(db.String(1000))
+    create_time = db.Column(db.TIMESTAMP,
+                            nullable=False)
+
+    record_usr = relationship('User', back_populates='my_records')
+    my_queries = relationship('Query', back_populates='in_record')
+
+    def set(self, uid):
+        self.user_id = uid,
+        self.create_time = func.now()
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+
 
 class Query(db.Model):
     __tablename__ = 'queries'
@@ -156,3 +211,17 @@ class Query(db.Model):
 
     use_algo = relationship('Algorithm', back_populates='used_by_queries')
     in_record = relationship('Record', back_populates='my_queries')
+
+    def set(self, rid, iid, aid, oid):
+        self.algo_id = aid
+        self.record_id = rid
+        self.input_id = iid
+        self.output_id = oid
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e

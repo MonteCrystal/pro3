@@ -165,3 +165,14 @@ def get_algorithm_list():
 @auth.login_required
 def addr_back_to_front(back):
     return f"/{back.split('/',2)[2]}"
+
+
+@auth.login_required
+def get_user_info():
+    user_info = {
+        'name': g.current_user.user_name,
+        'age': g.current_user.age,
+        'phone': g.current_user.phone_number,
+        'email': g.current_user.email
+    }
+    return jsonify({'user': user_info})

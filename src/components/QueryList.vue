@@ -6,12 +6,24 @@
         style="width: 100%">
       <el-table-column label="输入">
         <template slot-scope="scope">
-          <img :src="scope.row.input_addr"/>
+          <div class="demo-image__preview">
+            <el-image
+              :src="scope.row.input_addr"
+              :preview-src-list="srcList">
+            </el-image>
+          </div>
+<!--          <img :src="scope.row.input_addr"/>-->
         </template>
       </el-table-column>
       <el-table-column label="输出">
         <template slot-scope="scope">
-          <img :src="scope.row.output_addr"/>
+          <div class="demo-image__preview">
+            <el-image
+              :src="scope.row.output_addr"
+              :preview-src-list="srcList">
+            </el-image>
+          </div>
+<!--          <img :src="scope.row.output_addr"/>-->
         </template>
       </el-table-column>
       <el-table-column
@@ -37,8 +49,8 @@ export default {
   data() {
     this.getQueryList()
     return {
-      value: false,
-      queryList: this.queryList
+      queryList: this.queryList,
+      srcList: []
     }
   },
   methods:{
@@ -48,10 +60,14 @@ export default {
         method: 'post',
         url: '/main/record/getQueryList',
         data:{
-          recordId: this.record_id
+          recordId: this.record_id,
         }})
       .then(res=>{
         that.queryList = res.data['queryList']
+        that.queryList.forEach((query)=>{
+          that.srcList.push(query.input_addr)
+          that.srcList.push(query.output_addr)
+        })
       }).catch(function(error){
         console.log(error)
       })

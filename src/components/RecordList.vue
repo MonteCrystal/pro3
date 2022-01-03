@@ -2,6 +2,7 @@
   <div>
     <el-table
         :data="recordList"
+        stripe
         style="width: 100%">
       <el-table-column
           prop="date"
@@ -22,7 +23,6 @@
           <el-button @click="openClick(scope.row.id)">打开</el-button>
         </template>
       </el-table-column>
-
     </el-table>
     <el-pagination
         :hide-on-single-page="value"

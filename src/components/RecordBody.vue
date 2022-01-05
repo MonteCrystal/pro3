@@ -8,15 +8,13 @@
     <div class = "info">
       <el-descriptions title="病患信息" :column="2">
         <el-descriptions-item label="用户名">{{userInfo.name}}</el-descriptions-item>
-        <el-descriptions-item label="手机号">{{userInfo.phone}}</el-descriptions-item>
-        <el-descriptions-item label="居住地">/</el-descriptions-item>
-        <el-descriptions-item label="地址">/</el-descriptions-item>
-
+        <el-descriptions-item label="年龄">{{userInfo.age}}</el-descriptions-item>
+        <el-descriptions-item label="性别">{{userInfo.gender}}</el-descriptions-item>
         <el-descriptions-item label="左裸眼视力">
-          <el-tag size="small">/</el-tag>
+          <el-tag size="small">{{userInfo.left_eyesight}}</el-tag>
         </el-descriptions-item>
         <el-descriptions-item label="右裸眼视力">
-          <el-tag size="small">/</el-tag>
+          <el-tag size="small">{{userInfo.right_eyesight}}</el-tag>
         </el-descriptions-item>
       </el-descriptions>
     </div>
@@ -70,11 +68,9 @@ export default {
     getUserInfo(){
       let that = this
       that.axios({
-        method: 'post',
-        url: '/main/getUserInfo',
-        data:{
-          recordId: this.record_id
-        }})
+        method: 'get',
+        url: '/main/getUserInfo'
+      })
       .then(res=>{
         that.userInfo = res.data['user']
       }).catch(function(error){

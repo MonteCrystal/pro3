@@ -1,10 +1,10 @@
 <template>
-  <el-container>
-    <el-aside  width="200px" style="background-color: rgb(238, 241, 246)">
+  <el-container id="outmost_container">
+    <el-aside>
       <ReportMenu></ReportMenu>
     </el-aside>
     <el-container>
-      <el-header height="60px">
+      <el-header>
         <DisplayHeader></DisplayHeader></el-header>
       <el-main>
         <el-container direction="vertical"

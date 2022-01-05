@@ -171,8 +171,18 @@ def addr_back_to_front(back):
 def get_user_info():
     user_info = {
         'name': g.current_user.user_name,
+        'email': g.current_user.email,
         'age': g.current_user.age,
         'phone': g.current_user.phone_number,
-        'email': g.current_user.email
+        'gender': g.current_user.gender,
+        'address': g.current_user.address,
+        'left_eyesight': g.current_user.left_eyesight,
+        'right_eyesight': g.current_user.right_eyesight
     }
     return jsonify({'user': user_info})
+
+
+@auth.login_required
+def set_user_info():
+    g.current_user.set_user_info(request.get_json(silent=True)['userInfo'])
+    return jsonify({'code': 200, 'msg': 'success'})

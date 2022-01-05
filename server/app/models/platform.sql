@@ -2,10 +2,18 @@ create table if not exists users
 (
     id integer AUTO_INCREMENT primary key not null,
     user_name varchar(30) not null,
-    age varchar(3),
     password varchar(500) not null ,
+    email varchar(50) not null unique,
+    age varchar(3),
     phone_number varchar(15),
-    email varchar(50) not null unique
+    gender TEXT CHECK ( gender IN ('Female',
+                                   'Male',
+                                   'Transgender',
+                                   'Non-binary/non-conforming',
+                                   'Prefer not to respond') ),
+    address varchar(100),
+    left_eyesight varchar(4),
+    right_eyesight varchar(4)
 );
 
 

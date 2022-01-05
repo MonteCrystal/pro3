@@ -2,7 +2,8 @@ from server.app.controllers.file import upload, generate_record
 from server.app.init import app
 from server.app.controllers.user import \
         register, login, email_captcha, get_record_list, \
-        get_query_list, get_algorithm_list, get_user_info
+        get_query_list, get_algorithm_list, get_user_info, \
+        set_user_info
 
 app.add_url_rule(
         '/register', view_func=register, methods=['POST'])
@@ -21,7 +22,9 @@ app.add_url_rule(
 app.add_url_rule(
         '/main/getAlgorithmList', view_func=get_algorithm_list, methods=['GET'])
 app.add_url_rule(
-        '/main/getUserInfo', view_func=get_user_info, methods=['POST'])
+        '/main/getUserInfo', view_func=get_user_info, methods=['GET'])
+app.add_url_rule(
+        '/main/setUserInfo', view_func=set_user_info, methods=['POST'])
 
 if __name__ == '__main__':
     app.run(debug=True)

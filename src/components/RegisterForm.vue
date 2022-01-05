@@ -1,30 +1,35 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px">
-    <el-form-item>
-      <el-input v-model="form.username" auto-complete="off" placeholder="User name"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-input v-model="form.emailAddress" auto-complete="off" placeholder="Email"></el-input>
-    </el-form-item>
-    <el-form-item class="code">
-      <el-input v-model="form.verifyCode" placeholder="Verification Code"></el-input>
-      <el-button type="primary" :disabled='isDisable' @click="sendVerifyCode">Send Verify Code
+  <el-descriptions :column="2"  :colon="false" id="el-des">
+    <el-descriptions-item :span="2">
+      <el-input class="reg_input" v-model="form.username" placeholder="用户名"></el-input>
+    </el-descriptions-item>
+    <el-descriptions-item :span="2">
+      <el-input class="reg_input" v-model="form.emailAddress" placeholder="邮箱"></el-input>
+    </el-descriptions-item>
+    <el-descriptions-item :span="1">
+      <el-input class="verif_text" v-model="form.verifyCode" placeholder="验证码"></el-input>
+    </el-descriptions-item>
+    <el-descriptions-item>
+      <el-button class="verif_but" type="primary" :disabled='isDisable' @click="sendVerifyCode">
+        发送验证码
       </el-button>
-    </el-form-item>
-    <el-form-item>
-      <el-input v-model="form.password" auto-complete="off" placeholder="Password"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-input v-model="form.confirmPassword" auto-complete="off" placeholder="Confirm Password"></el-input>
-      <p class="warn" v-if="!isPWDSame">The confirmed password should be same with the password!</p>
+    </el-descriptions-item>
+    <el-descriptions-item :span="2">
+      <el-input class="reg_input" v-model="form.password" placeholder="密码" show-password></el-input>
+    </el-descriptions-item>
+    <el-descriptions-item :span="2">
+      <el-input class="reg_input" v-model="form.confirmPassword" placeholder="确认密码" show-password></el-input>
+    </el-descriptions-item>
+    <el-descriptions-item :span="2">
+      <p class="warn" v-if="!isPWDSame">两次输入的密码应该相同</p>
       <p class="warn" v-if="isRegisterClick && errorMsg!== null">{{ errorMsg }}</p>
+    </el-descriptions-item>
+    <el-descriptions-item>
+      <el-button id="reg_but" type="primary" @click="registerClick">注册</el-button>
+      <p class="login" @click="gotoLogin">已经拥有账号？现在去登录</p>
+    </el-descriptions-item>
+  </el-descriptions>
 
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="registerClick" style="width:100%;">Register</el-button>
-      <p class="login" @click="gotoLogin">Already have an account? Log in immediately </p>
-    </el-form-item>
-  </el-form>
 
 </template>
 
@@ -115,4 +120,33 @@ export default {
   text-indent: 8px;
   width: 100%;
 }
+
+.reg_input{
+  width: 250px;
+}
+
+.verif_text{
+  width: 100px;
+  padding: 0;
+}
+
+.verif_but{
+  width: 110px;
+  border-radius: 0px;
+  justify-content: center;
+  background-color: #CAD5FD;
+  border: 0px #ffffff;
+  color: #fff;
+  text-shadow: 1px 1px 10px #999;
+}
+
+#reg_but{
+  width: 100%;
+  border-radius: 100px;
+  background-color: #CAD5FD;
+  border: 0px;
+  color: #fff;
+  text-shadow: 1px 1px 10px #999;
+}
+
 </style>

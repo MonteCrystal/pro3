@@ -45,21 +45,46 @@ export default {
 </script>
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 10px;
   height: 100%;
+  margin: -8px -8px auto;
+  width: 100%;
+  position: fixed;
 }
 
-.boundary {
-  /*border-style: dashed;*/
-  border-style: solid;
-  border-color: #d3dce6;
-  border-width: 0.5px;
-  border-radius: 100px;
+.el-header, .el-footer{
+  background-color: #D3EFF9;
+  color: #000;
+  line-height: 60px;
 }
+
+.el-aside {
+  height: 230px;
+  color: #000;
+  background-color: #CAD5FD;
+  max-width: 50%;
+}
+
+#outmost_container{
+   min-height: 100%;
+}
+
+#record_table{
+  padding: 10px;
+  border: 1px double #B6CBE3;
+  border-radius: 15px;
+}
+
+#personal_description{
+  padding: 15px;
+  border: 1px double #B6CBE3;
+  border-radius: 15px;
+}
+
 </style>

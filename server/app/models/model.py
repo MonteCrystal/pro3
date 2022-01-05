@@ -19,12 +19,17 @@ class User(db.Model, UserMixin):
                    nullable=False)
     user_name = db.Column(db.String(30),
                           nullable=False)
-    age = db.Column(db.String(3))
-    password = db.Column(db.String(500))
-    phone_number = db.Column(db.String(15))
+    password = db.Column(db.String(500),
+                         nullable=False)
     email = db.Column(db.String(50),
                       nullable=False,
                       unique=True)
+    age = db.Column(db.String(3))
+    phone_number = db.Column(db.String(15))
+    gender = db.Column(db.TEXT)
+    address = db.Column(db.String(100))
+    left_eyesight = db.Column(db.String(4))
+    right_eyesight = db.Column(db.String(4))
 
     my_records = relationship('Record', back_populates='record_usr')
     my_dataobjs = relationship('DataObj', back_populates='data_usr')
@@ -46,6 +51,23 @@ class User(db.Model, UserMixin):
         self.id = 0
         self.user_name = username
         self.email = email
+        self.age = '/'
+        self.phone_number = '/'
+        self.gender = 'Prefer not to respond'
+        self.address = '/'
+        self.left_eyesight = '0.0'
+        self.right_eyesight = '0.0'
+
+    def set_user_info(self, userInfo):
+        self.user_name = userInfo['name']
+        self.email = userInfo['email']
+        self.age = userInfo['age']
+        self.phone_number = userInfo['phone']
+        self.gender = userInfo['gender']
+        self.address = userInfo['address']
+        self.left_eyesight = userInfo['left_eyesight']
+        self.right_eyesight = userInfo['right_eyesight']
+        self.save()
 
     def save(self):
         try:

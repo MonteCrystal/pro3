@@ -169,4 +169,8 @@ export default {
   background-color: white;
 }
 
+#personal_description > div.el-descriptions__body > table > tbody:nth-child(1) > tr > td:nth-child(1) > div{
+  justify-content: left;
+}
+
 </style>

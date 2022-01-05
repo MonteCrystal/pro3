@@ -60,7 +60,6 @@ export default {
   height: 100%;
   margin: -8px -8px auto;
   width: 100%;
-  position: fixed;
 }
 
 .el-header, .el-footer{

@@ -4,6 +4,14 @@
       :data="recordList"
       stripe
       style="width: 100%">
+<!--      <el-table-column>-->
+<!--        <template slot-scope="scope">-->
+<!--          <img src="cover.jpg" height="200" width="250" @click="openClick(scope.row.id)"/>-->
+<!--          <p>{{scope.row.date}}</p>-->
+<!--          <p>{{scope.row.name}}</p>-->
+<!--          <p>{{scope.row.note}}</p>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     <el-table-column
         prop="date"
         label="日期"

@@ -16,6 +16,7 @@
     </el-descriptions-item>
     <el-descriptions-item :span="2">
       <el-input class="reg_input" v-model="form.password" placeholder="密码" show-password></el-input>
+      <p class="warn" v-if="!validPW">密码应包括6-20位数字、字母或符号</p>
     </el-descriptions-item>
     <el-descriptions-item :span="2">
       <el-input class="reg_input" v-model="form.confirmPassword" placeholder="确认密码" show-password></el-input>
@@ -47,6 +48,15 @@ export default {
     }),
     isPWDSame() {
       return this.form.password === this.form.confirmPassword
+    },
+    validPW(){
+      var len = this.form.password.length
+      if(len > 20){
+        return false
+      }else if(len < 6){
+        return false
+      }
+      return true
     }
   },
   data() {

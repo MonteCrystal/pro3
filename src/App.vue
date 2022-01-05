@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @click="clicked">
+  <div id="app" @click="clicked" class="bg" :style="bg">
     <router-view/>
   </div>
 </template>
@@ -12,6 +12,11 @@ export default {
   components: {},
   data() {
     return{
+      bg:{
+        backgroundImage: "url(" + require("/imed_bg.png") + ")",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
+      }
     }
   },
   methods:{

@@ -1,5 +1,6 @@
 <template>
-<div>
+  <div>
+    <img id="logo" src="/imed_logo.png"/>
   </div>
 </template>
 
@@ -15,5 +16,10 @@ export default {
 </script>
 
 <style scoped>
+
+#logo{
+  height: 50px;
+  transform: translateY(5px);
+}
 
 </style>

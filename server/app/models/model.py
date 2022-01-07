@@ -180,6 +180,16 @@ class Algorithm(db.Model):
             db.session.rollback()
             raise e
 
+    def increment(self):
+        self.used_time = self.used_time + 1
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            raise e
+
+
 
 class Record(db.Model):
     __tablename__ = 'records'

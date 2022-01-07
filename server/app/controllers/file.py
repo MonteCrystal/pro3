@@ -64,6 +64,7 @@ def generate_record():
 
 def run_algo_on_ipt(algo_id, input_id):
     algo = db.session.query(Algorithm).filter(Algorithm.id == algo_id).first()
+    algo.increment()
     algo_addr = f"../public{algo.address}"
     outetype = algo.output_type.lower()
     inpt_addr = db.session.query(DataObj.address).filter(DataObj.id == input_id).first()[0]
